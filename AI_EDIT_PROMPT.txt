@@ -1,0 +1,32 @@
+WEAVE is a student-focused professional networking platform.
+
+Current version:
+- Plain HTML
+- CSS
+- Vanilla JavaScript
+- localStorage
+- No framework
+
+Product vision:
+WEAVE combines professional networking, student collaboration, opportunities, skill exchange and AI assistance.
+
+IMPORTANT RULES FOR ANY AI EDITOR:
+1. Read README.md first.
+2. Do not rewrite the project from scratch.
+3. Do not migrate to React/Next/Tailwind/TypeScript unless explicitly requested.
+4. Preserve the current visual language.
+5. Make one feature change at a time.
+6. Reuse existing functions.
+7. Keep localStorage persistence until a backend is explicitly requested.
+8. Do not create fake buttons that do nothing.
+9. Check for JavaScript errors after changes.
+10. Keep desktop and mobile responsive.
+
+Future AI architecture should use a provider-independent service layer:
+aiService.analyzeProfile()
+aiService.recommendSkills()
+aiService.recommendOpportunities()
+aiService.explainTeamMatch()
+aiService.generatePost()
+
+This will allow OpenAI, Gemini, Claude or local Ollama to be connected later.
