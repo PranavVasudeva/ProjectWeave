@@ -35,6 +35,9 @@ function layout(main){
     <input id="globalSearch" class="search" placeholder="Search people, jobs, posts..." onkeydown="globalSearch(event)">
     <nav class="top-actions">${navItems.map(([id,label])=>`<button class="${route===id?"active":""}" onclick="go('${id}')"><span>${label}</span> ${id==="notifications"&&unreadCount()?`🔴`:id==="messages"?"💬":""}</button>`).join("")}</nav>
     <button style="border:0;background:transparent" onclick="go('profile')"><div class="avatar">${initials(state.currentUser.name)}</div></button>
+    <button class="btn secondary small" onclick="signOutUser()">
+  Sign Out
+</button>
   </div></header>
   <div class="shell"><aside class="left">${leftSidebar()}</aside><main>${main}</main><aside class="right">${rightSidebar()}</aside></div>`;
 }
@@ -46,35 +49,39 @@ function leftSidebar(){
 {
   function rightSidebar(){
   const news = [
-    {
-      icon: "🚀",
-      category: "STARTUPS",
-      title: "Indian startups attract fresh investor interest",
-      text: "Funding activity and IPO discussions continue to shape India's startup ecosystem.",
-      time: "2 min ago"
-    },
-    {
-      icon: "📈",
-      category: "MARKETS",
-      title: "Markets remain focused on tech & fintech",
-      text: "Investors continue watching technology, fintech and AI companies closely.",
-      time: "4 min ago"
-    },
-    {
-      icon: "🤖",
-      category: "AI & TECH",
-      title: "AI continues to reshape student careers",
-      text: "AI tools and automation are creating new opportunities for developers and founders.",
-      time: "6 min ago"
-    },
-    {
-      icon: "💡",
-      category: "TRENDING",
-      title: "What founders are watching today",
-      text: "AI • FinTech • SaaS • EV • Startups",
-      time: "8 min ago"
-    }
-  ];
+  {
+    icon: "🇮🇳",
+    category: "INDIA • TECH",
+    title: "India gets $511.5 million in FDI under new policy",
+    text: "New investment proposals cover IT, AI, data centers and other sectors.",
+    time: "1 day ago",
+    url: "https://www.reuters.com/world/india/india-gets-5115-million-fdi-under-new-policy-neighbouring-countries-2026-08-21/"
+  },
+  {
+    icon: "🤖",
+    category: "AI & TECH",
+    title: "AI reshapes India's IT services sector",
+    text: "Indian IT companies are adapting contracts and hiring models as AI changes productivity.",
+    time: "2 days ago",
+    url: "https://www.reuters.com/world/india/ai-reshapes-indias-it-services-sector-contracts-clients-demand-more-less-2026-08-20/"
+  },
+  {
+    icon: "💰",
+    category: "STARTUPS",
+    title: "Higgsfield raises $400M Series B",
+    text: "The AI startup has seen its valuation rise sharply as investors continue backing AI companies.",
+    time: "Today",
+    url: "https://techcrunch.com/"
+  },
+  {
+    icon: "🚀",
+    category: "STARTUPS",
+    title: "TechCrunch — Latest startup & AI news",
+    text: "Explore the latest verified stories across startups, AI, funding and technology.",
+    time: "LIVE",
+    url: "https://techcrunch.com/latest/"
+  }
+];
 
   return `
     <div class="market-pulse-card">
@@ -88,8 +95,14 @@ function leftSidebar(){
 
       <div class="market-pulse-list">
         ${news.map(n => `
-          <div class="market-news-item">
-            <div class="market-news-top">
+          <a
+  class="market-news-item"
+  href="${n.url}"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+        
+          <div class="market-news-top">
               <span class="market-news-icon">${n.icon}</span>
               <span class="market-news-category">${n.category}</span>
               <span class="market-news-time">${n.time}</span>
@@ -101,7 +114,7 @@ function leftSidebar(){
             <div class="market-news-link">
               Why it matters →
             </div>
-          </div>
+          </a>
         `).join("")}
       </div>
 
@@ -1143,4 +1156,23 @@ function setupAuth() {
 
     }
   };
+}
+async function signOutUser() {
+  try {
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+      throw error;
+    }
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    document.getElementById("app").innerHTML = authScreen();
+    setupAuth();
+
+    console.log("Signed out successfully");
+  } catch (error) {
+    console.error("SIGNOUT ERROR:", error);
+    alert("Unable to sign out. Please try again.");
+  }
 }
